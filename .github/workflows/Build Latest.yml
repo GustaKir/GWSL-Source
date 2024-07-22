@@ -42,13 +42,8 @@ jobs:
         run: |
           python build.py
       - name: Commit and push build artifacts
-        run: |
-          git config --global user.name 'github-actions[bot]'
-          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          git checkout -b build-artifacts || git checkout build-artifacts
-          git add dist/GWSL_*
-          git commit -m "Add build artifacts"
-          git push origin build-artifacts
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: gwsl-build
+          path: dist/GWSL_{version}
   
