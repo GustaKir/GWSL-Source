@@ -8,7 +8,7 @@ on:
         default: 'World'
         required: true
       version:
-        description: "Version "
+        description: "Version"
         default: "145_MSIX_build_3"
         required: true
 
@@ -41,8 +41,12 @@ jobs:
         run: |
           python build.py ${{ github.event.inputs.version }}
 
+      - name: Zip build artifacts
+        run: |
+          powershell Compress-Archive -Path "dist/GWSL_${{ github.event.inputs.version }}" -DestinationPath "dist/GWSL_${{ github.event.inputs.version }}.zip"
+
       - name: Upload build artifacts
         uses: actions/upload-artifact@v3
         with:
           name: gwsl-build
-          path: dist/GWSL_${{ github.event.inputs.version }}
+          path: dist/GWSL_${{ github.event.inputs.version }}.zip
