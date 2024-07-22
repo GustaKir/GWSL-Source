@@ -1,19 +1,15 @@
-# This is a basic workflow that is manually triggered
-
 name: Manual workflow
 
-# Controls when the action will run. Workflow runs when manually triggered using the UI
-# or API.
 on:
   workflow_dispatch:
-    # Inputs the workflow accepts.
     inputs:
       name:
-        # Friendly description to be shown in the UI instead of 'name'
         description: 'Build a GWSL Release'
-        # Default value if no value is explicitly provided
         default: 'World'
-        # Input has to be provided for the workflow to run
+        required: true
+      version:
+        description: "Version "
+        default: "145_MSIX_build_3"
         required: true
 
 jobs:
@@ -23,10 +19,12 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+
       - name: Set up Python 3.7
         uses: actions/setup-python@v1
         with:
           python-version: 3.7
+
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
@@ -38,12 +36,13 @@ jobs:
           pip install infi.systray
           pip install keyboard
           pip install pyinstaller==3.5
+
       - name: Building 
         run: |
-          python build.py
-      - name: Commit and push build artifacts
+          python build.py ${{ github.event.inputs.version }}
+
+      - name: Upload build artifacts
         uses: actions/upload-artifact@v3
         with:
           name: gwsl-build
-          path: dist/GWSL_{version}
-  
+          path: dist/GWSL_${{ github.event.inputs.version }}
