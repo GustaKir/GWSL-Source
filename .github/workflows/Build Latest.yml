@@ -38,16 +38,6 @@ jobs:
           pip install infi.systray
           pip install keyboard
           pip install pyinstaller==3.5
-      - name: Building GWSL_service...
+      - name: Building 
         run: |
-          echo "pyinstaller"
-          #python pyinstaller.....
-      - name: Building GWSL...
-        run: |
-          echo "pyinstaller"
-      - name: Merging Results...
-        run: |
-          echo "pyinstaller"
-      - name: Copying Assets...
-        run: |
-          echo "pyinstaller"
+          python build.py
