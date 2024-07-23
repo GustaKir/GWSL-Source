@@ -49,7 +49,7 @@ lc_name = "Licenses145.txt"
 
 show_ad = False
 
-debug = False
+debug = True
 
 args = sys.argv
 
@@ -340,7 +340,8 @@ if "--r" not in args:
 
     try:
         instance = singleton.SingleInstance()
-    except singleton.SingleInstanceException:
+    except singleton.SingleInstanceException as e:
+        logger.exception("SingleInstanceException Exception occurred - cannot raise window")
         print("quit")
         try:
             def windowEnumerationHandler(hwnd, top_windows):
@@ -359,7 +360,8 @@ if "--r" not in args:
             logger.exception("Exception occurred - cannot raise window")
 
         sys.exit()
-    except PermissionError:
+    except PermissionError as e:
+        logger.exception("PermissionError Exception occurred - cannot raise window")
         print("quit")
         try:
             def windowEnumerationHandler(hwnd, top_windows):
@@ -682,7 +684,7 @@ def wsl_run(distro, command, caller, nolog=False):
     """
     cmd = "wsl.exe ~ -d " + str(distro) + " . ~/.profile;nohup /bin/sh -c " + '"' + str(command) + '&"'
     
-    if nolog == False:
+    if nolog == False or debug==True:
         logger.info(f"(runos) WSL SHELL $ {cmd}")
         #logger.info(f"WSL OUTPUT > {out}")
         
@@ -706,7 +708,7 @@ def runs(distro, command, nolog=False):
     cmd = "wsl.exe ~ -d " + str(distro) + " . ~/.profile;nohup /bin/sh -c " + '"' + str(command) + '&"'
 
     
-    if nolog == False:
+    if nolog == False or debug == True:
         logger.info(f"(runos) WSL SHELL $ {cmd}")
     subprocess.Popen(cmd,
                      shell=True)  # .readlines()
@@ -782,10 +784,10 @@ def get_ip(machine):
     :return:
     """
     #print("get_ip")
-    cmd = "wsl.exe -d " + str(machine) + ' ' + "/bin/sh -c " + '"' + """(cat /etc/resolv.conf | grep nameserver | awk '{print $2; exit;}')""" + '"'
+    cmd = "wsl.exe -d " + str(machine) + ' ' + "/bin/sh -c " + '"' + """(ip route list default | awk '{print $3}')""" + '"'
 
     
-    #print(cmd)
+    print("(get_ip) cmd :", cmd)
     result = os.popen(cmd).readlines()[0]
 
     try:
@@ -798,15 +800,15 @@ def get_ip(machine):
     try:
         ipa = ipaddress.ip_address(result)
     except:
-        cmd = "wsl.exe -d " + str(machine) + ' ' + "/bin/sh -c " + '"' + """echo $(cat /etc/resolv.conf | grep nameserver | awk '{print $2; exit;}')""" + '"'
-        result = os.popen(cmd).readlines()[0]
+        cmd = "wsl.exe -d " + str(machine) + ' ' + "/bin/sh -c " + '"' + """echo $(ip route list default | awk '{print $3; exit;}')""" + '"'
+        result = os.popen(cmd).readlines()[0].rstrip("\n")
         #result = "localhost"
     
         
     #print("ipa", ipa, "ipd")
 
     
-    #result = runo3(machine, """echo $(cat /etc/resolv.conf | grep nameserver | awk '{print $2; exit;}')""")
+    #result = runo3(machine, """echo $(ip route list default | awk '{print $3; exit;}')""")
     #print("ip", result, "done")
     return result  # [0][:-1]
 
@@ -4553,7 +4555,9 @@ if "--r" not in args: # start normally
 
                 draw(canvas)
                 pygame.display.update()
-
+                
+            except SystemExit:
+                pass
             except Exception as e:
                 logger.exception("Exception occurred - Error in Mainloop")
 

@@ -1,9 +1,19 @@
 import os
 import subprocess
 import time
+import logging
 
 script = None
 
+
+app_path = os.getenv('APPDATA') + "\\GWSL\\"
+logger = logging.Logger("GWSL_TOOL ", level=0)
+# logger = logging.getLogger("GWSL " + version)
+# Create handlers
+f_handler = logging.FileHandler(app_path + 'wsl_tool.log')
+
+def print(txt):
+    logger.info("PRINT() : " + txt)
 
 def pat_con(path):
     if "/" in path:
