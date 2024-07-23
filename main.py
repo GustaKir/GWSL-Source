@@ -674,6 +674,8 @@ def main():
                 systray.shutdown()
                 sys.exit()
 
+        except SystemExit:
+                pass
         except:
             logger.exception("Exception occurred in main loop")
             kill_server()

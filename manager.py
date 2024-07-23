@@ -340,8 +340,7 @@ if "--r" not in args:
 
     try:
         instance = singleton.SingleInstance()
-    except singleton.SingleInstanceException as e:
-        logger.exception("SingleInstanceException Exception occurred - cannot raise window")
+    except singleton.SingleInstanceException:
         print("quit")
         try:
             def windowEnumerationHandler(hwnd, top_windows):
@@ -4556,8 +4555,6 @@ if "--r" not in args: # start normally
                 draw(canvas)
                 pygame.display.update()
                 
-            except SystemExit:
-                pass
             except Exception as e:
                 logger.exception("Exception occurred - Error in Mainloop")
 
