@@ -19,19 +19,27 @@ then
 		then
 			# Configure Fish
 			sed -i.bak '/DISPLAY /d' ~/.config/fish/config.fish
+			sed -i.bak '/WAYLAND_DISPLAY /d' ~/.config/fish/config.fish
 			echo "set -gx DISPLAY :0.0 #GWSL" >> ~/.config/fish/config.fish
+			echo "set -e WAYLAND_DISPLAY #GWSL" >> ~/.config/fish/config.fish
 		elif [ $wsl_shell == "zsh" ]
 		then
 			# Configure Zsh
 			sed -i.bak '/DISPLAY=/d' ~/.zshrc
+			sed -i.bak '/WAYLAND_DISPLAY=/d' ~/.zshrc
 			echo "export DISPLAY=:0.0  #GWSL" >> ~/.zshrc
+			echo "unset WAYLAND_DISPLAY  #GWSL" >> ~/.zshrc
 		elif [ $wsl_shell == "bash" ]
 		then
 			# Configure Bash
 			sed -i.bak '/DISPLAY=/d' ~/.profile
+			sed -i.bak '/WAYLAND_DISPLAY=/d' ~/.profile
 			echo "export DISPLAY=:0.0  #GWSL" >> ~/.profile
+			echo "unset WAYLAND_DISPLAY  #GWSL" >> ~/.profile
 			sed -i.bak '/DISPLAY=/d' ~/.bashrc
+			sed -i.bak '/WAYLAND_DISPLAY=/d' ~/.bashrc
 			echo "export DISPLAY=:0.0  #GWSL" >> ~/.bashrc
+			echo "unset WAYLAND_DISPLAY  #GWSL" >> ~/.bashrc
 		fi
 	
 	elif [ $wsl_version == "2" ]
@@ -41,19 +49,27 @@ then
 		then
 			# Configure Fish
 			sed -i.bak '/DISPLAY /d' ~/.config/fish/config.fish
-			echo "set -gx DISPLAY (cat /etc/resolv.conf | grep nameserver | awk '{print \$2; exit;}'):0.0 #GWSL" >> ~/.config/fish/config.fish
+			sed -i.bak '/WAYLAND_DISPLAY /d' ~/.config/fish/config.fish
+			echo "set -gx DISPLAY (ip route list default | awk '{print \$3; exit;}'):0.0 #GWSL" >> ~/.config/fish/config.fish
+			echo "set -e WAYLAND_DISPLAY #GWSL" >> ~/.config/fish/config.fish
 		elif [ $wsl_shell == "zsh" ]
 		then
 			# Configure Zsh
 			sed -i.bak '/DISPLAY=/d' ~/.zshrc
-			echo "export DISPLAY=\$(cat /etc/resolv.conf | grep nameserver | awk '{print \$2; exit;}'):0.0 #GWSL" >> ~/.zshrc
+			sed -i.bak '/WAYLAND_DISPLAY=/d' ~/.zshrc
+			echo "export DISPLAY=\$(ip route list default | awk '{print \$3; exit;}'):0.0 #GWSL" >> ~/.zshrc
+			echo "unset WAYLAND_DISPLAY  #GWSL" >> ~/.zshrc
 		elif [ $wsl_shell == "bash" ]
 		then
 			# Configure Bash
 			sed -i.bak '/DISPLAY=/d' ~/.profile
-			echo "export DISPLAY=\$(cat /etc/resolv.conf | grep nameserver | awk '{print \$2; exit;}'):0.0 #GWSL" >> ~/.profile
+			sed -i.bak '/WAYLAND_DISPLAY=/d' ~/.profile
+			echo "export DISPLAY=\$(ip route list default | awk '{print \$3; exit;}'):0.0 #GWSL" >> ~/.profile
+			echo "unset WAYLAND_DISPLAY  #GWSL" >> ~/.profile
 			sed -i.bak '/DISPLAY=/d' ~/.bashrc
-			echo "export DISPLAY=\$(cat /etc/resolv.conf | grep nameserver | awk '{print \$2; exit;}'):0.0 #GWSL" >> ~/.bashrc
+			sed -i.bak '/WAYLAND_DISPLAY=/d' ~/.bashrc
+			echo "export DISPLAY=\$(ip route list default | awk '{print \$3; exit;}'):0.0 #GWSL" >> ~/.bashrc
+			echo "unset WAYLAND_DISPLAY  #GWSL" >> ~/.bashrc
 		fi
 	fi
 
@@ -91,19 +107,19 @@ then
 		then
 			# Configure Fish
 			sed -i.bak '/PULSE_SERVER /d' ~/.config/fish/config.fish
-			echo "set -gx PULSE_SERVER tcp:(cat /etc/resolv.conf | grep nameserver | awk '{print \$2; exit;}') #GWSL" >> ~/.config/fish/config.fish
+			echo "set -gx PULSE_SERVER tcp:(ip route list default | awk '{print \$3; exit;}') #GWSL" >> ~/.config/fish/config.fish
 		elif [ $wsl_shell == "zsh" ]
 		then
 			# Configure Zsh
 			sed -i.bak '/PULSE_SERVER=/d' ~/.zshrc
-			echo "export PULSE_SERVER=tcp:\$(cat /etc/resolv.conf | grep nameserver | awk '{print \$2; exit;}') #GWSL" >> ~/.zshrc
+			echo "export PULSE_SERVER=tcp:\$(ip route list default | awk '{print \$3; exit;}') #GWSL" >> ~/.zshrc
 		elif [ $wsl_shell == "bash" ]
 		then
 			# Configure Bash
 			sed -i.bak '/PULSE_SERVER=/d' ~/.profile
-			echo "export PULSE_SERVER=tcp:\$(cat /etc/resolv.conf | grep nameserver | awk '{print \$2; exit;}') #GWSL" >> ~/.profile
+			echo "export PULSE_SERVER=tcp:\$(ip route list default | awk '{print \$3; exit;}') #GWSL" >> ~/.profile
 			sed -i.bak '/PULSE_SERVER=/d' ~/.bashrc
-			echo "export PULSE_SERVER=tcp:\$(cat /etc/resolv.conf | grep nameserver | awk '{print \$2; exit;}') #GWSL" >> ~/.bashrc
+			echo "export PULSE_SERVER=tcp:\$(ip route list default | awk '{print \$3; exit;}') #GWSL" >> ~/.bashrc
 		fi
 	fi
 

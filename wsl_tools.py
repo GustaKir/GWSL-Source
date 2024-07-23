@@ -11,10 +11,10 @@ logger = logging.Logger("GWSL_TOOL ", level=0)
 # logger = logging.getLogger("GWSL " + version)
 # Create handlers
 f_handler = logging.FileHandler(app_path + 'wsl_tool.log')
-
-def print(txt):
-    logger.info("PRINT() : " + txt)
-
+# Replace print statements with logger.info
+def print(*args):
+    logger.info("PRINT: " + " ".join(map(str, args)))
+    
 def pat_con(path):
     if "/" in path:
         pt = path.split("/")
