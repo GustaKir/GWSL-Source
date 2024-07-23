@@ -54,6 +54,9 @@ debug = False
 args = sys.argv
 
 
+# Replace print statements with logger.info
+def print(*args):
+    logger.info("PRINT: " + " ".join(map(str, args)))
 
 
 frozen = 'not'
@@ -2798,59 +2801,59 @@ def get_light():
 
 def spawn_n_run(machine, command, w_mode, w_clipboard, GTK, QT, appends, cmd=False, theme="Follow Windows",
                 root="False", dbus="False", keep="False"):
-    ver = get_version(machine)
-    if root == "True":
-        code = pymsgbox.password(text='Enter Sudo Password For ' + str(machine.replace("-", " ")) + ":",
-                                 title='Authentication', mask='*')
-        if code == None:
-            return None
-        passw = "echo '" + code + "' | sudo -H -S "
+    try:
+        ver = get_version(machine)
+        if root == "True":
+            code = pymsgbox.password(text='Enter Sudo Password For ' + str(machine.replace("-", " ")) + ":",
+                                     title='Authentication', mask='*')
+            if code == None:
+                return None
+            passw = "echo '" + code + "' | sudo -H -S "
 
-    else:
-        passw = ""
+        else:
+            passw = ""
+            
+        v = ""
         
-    v = ""
-    
-    if dbus == "True":
-        v = start_dbus(machine)
-    if dbus == "True" and "system message bus already started" not in v:
-        if passw == "":
-            code = pymsgbox.password(text="Enter Sudo Password To Start DBus:", title='DBus Not Started.', mask='*')
+        if dbus == "True":
+            v = start_dbus(machine)
+        if dbus == "True" and "system message bus already started" not in v:
+            if passw == "":
+                code = pymsgbox.password(text="Enter Sudo Password To Start DBus:", title='DBus Not Started.', mask='*')
 
-            runo3(machine, "echo '" + code + "' | sudo -H -S " + "/etc/init.d/dbus start", nolog=True)
-        else:
-            runo3(machine, passw + "/etc/init.d/dbus start", nolog=True)
-
-    if theme == "Follow Windows":
-        k = get_light()
-        prof = tools.profile(machine)
-        if "GTK_THEME" in prof:
-            if k == 1:
-                l_mode = "GTK_THEME=$GTK_THEME:light "
+                runo3(machine, "echo '" + code + "' | sudo -H -S " + "/etc/init.d/dbus start", nolog=True)
             else:
-                l_mode = "GTK_THEME=$GTK_THEME:dark "
-        else:
-            if k == 1:
+                runo3(machine, passw + "/etc/init.d/dbus start", nolog=True)
+
+        if theme == "Follow Windows":
+            k = get_light()
+            prof = tools.profile(machine)
+            if "GTK_THEME" in prof:
+                if k == 1:
+                    l_mode = "GTK_THEME=$GTK_THEME:light "
+                else:
+                    l_mode = "GTK_THEME=$GTK_THEME:dark "
+            else:
+                if k == 1:
+                    l_mode = "GTK_THEME=Adwaita:light "
+                else:
+                    l_mode = "GTK_THEME=Adwaita:dark "
+
+        elif theme == "Light Mode":
+            prof = tools.profile(machine)
+            if "GTK_THEME" in prof:
+                l_mode = "GTK_THEME=$GTK_THEME:light "
+
+            else:
                 l_mode = "GTK_THEME=Adwaita:light "
+
+        elif theme == "Dark Mode":
+            prof = tools.profile(machine)
+            if "GTK_THEME" in prof:
+                l_mode = "GTK_THEME=$GTK_THEME:dark "
             else:
                 l_mode = "GTK_THEME=Adwaita:dark "
 
-    elif theme == "Light Mode":
-        prof = tools.profile(machine)
-        if "GTK_THEME" in prof:
-            l_mode = "GTK_THEME=$GTK_THEME:light "
-
-        else:
-            l_mode = "GTK_THEME=Adwaita:light "
-
-    elif theme == "Dark Mode":
-        prof = tools.profile(machine)
-        if "GTK_THEME" in prof:
-            l_mode = "GTK_THEME=$GTK_THEME:dark "
-        else:
-            l_mode = "GTK_THEME=Adwaita:dark "
-
-    try:
         if w_mode == "Default" and w_clipboard == "Default":
             # Don't start a new server
             if GTK == "Default":
