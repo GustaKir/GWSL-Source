@@ -53,12 +53,6 @@ debug = False
 
 args = sys.argv
 
-
-# Replace print statements with logger.info
-def print(*args):
-    logger.info("PRINT: " + " ".join(map(str, args)))
-
-
 frozen = 'not'
 if getattr(sys, 'frozen', False):
     # we are running in a bundle
@@ -123,6 +117,12 @@ f_handler.setFormatter(f_format)
 # Add handlers to the logger
 logger.addHandler(f_handler)
 logger.addFilter(DuplicateFilter())
+
+
+# Replace print statements with logger.info
+def print(*args):
+    logger.info("PRINT: " + " ".join(map(str, args)))
+
 
 updated = False
 new_install = False
