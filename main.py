@@ -755,5 +755,5 @@ if __name__ == "__main__":
         keyboard.add_hotkey('alt+ctrl+g', open_dashboard, args=systray)
         ic = icon("systray")
         main()
-    except:
+    except Exception as e:
         logger.exception("Exception occurred - Cannot Start Service. Make sure the settings file is not corrupted.")

@@ -4597,7 +4597,7 @@ elif args[1] == "--r" and "--ssh" not in args: # launch a shortcut
             elif "--clip_enabled" in arg:
                 clipboard = arg[15:]
                 if clipboard == "Enabled":
-                    clipboard = "Enabled"
+                    clipboard = "Enabled" #TODO: why set same value again
                 elif clipboard == "Default":
                     pass
                 else:
