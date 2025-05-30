@@ -35,7 +35,7 @@ jobs:
           pip install imtools
           pip install infi.systray
           pip install keyboard
-          pip install pyinstaller==3.5
+          pip install pyinstaller
 
       - name: Building 
         run: |
